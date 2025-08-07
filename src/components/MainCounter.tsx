@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, memo } from 'react';
 import { EarthRotationCalculator } from '@/lib/earth-rotation-calculator';
 import { formatDateTime } from '@/lib/date-formatter';
 import { EarthRotationData } from '@/types/earth-rotation';
@@ -9,7 +9,7 @@ import { EarthRotationData } from '@/types/earth-rotation';
  * メインカウンター表示コンポーネント
  * 現在時刻と地球の回転数をリアルタイムで表示
  */
-export default function MainCounter() {
+function MainCounter() {
   const [rotationData, setRotationData] = useState<EarthRotationData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -126,3 +126,5 @@ export default function MainCounter() {
     </div>
   );
 }
+
+export default memo(MainCounter);

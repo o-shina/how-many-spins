@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, memo } from 'react';
 import { TauntGenerator } from '@/lib/taunt-generator';
 import { EarthRotationCalculator } from '@/lib/earth-rotation-calculator';
 import { TauntData } from '@/types/earth-rotation';
@@ -8,7 +8,7 @@ import { TauntData } from '@/types/earth-rotation';
 /**
  * 煽りフレーズ生成・表示パネルコンポーネント
  */
-export default function TauntPanel() {
+function TauntPanel() {
   const [tauntData, setTauntData] = useState<TauntData | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [copyMessage, setCopyMessage] = useState<string | null>(null);
@@ -163,3 +163,5 @@ export default function TauntPanel() {
     </div>
   );
 }
+
+export default memo(TauntPanel);

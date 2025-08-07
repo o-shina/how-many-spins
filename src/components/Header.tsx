@@ -1,9 +1,11 @@
 'use client';
 
+import { memo } from 'react';
+
 /**
  * アプリケーションのヘッダーコンポーネント
  */
-export default function Header() {
+function Header() {
   return (
     <header className="bg-white shadow-sm border-b border-gray-200 py-4">
       <div className="container mx-auto px-4">
@@ -19,3 +21,5 @@ export default function Header() {
     </header>
   );
 }
+
+export default memo(Header);

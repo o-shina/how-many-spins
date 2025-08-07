@@ -1,9 +1,11 @@
 'use client';
 
+import { memo } from 'react';
+
 /**
  * アプリケーションのフッターコンポーネント
  */
-export default function Footer() {
+function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
@@ -33,3 +35,5 @@ export default function Footer() {
     </footer>
   );
 }
+
+export default memo(Footer);
