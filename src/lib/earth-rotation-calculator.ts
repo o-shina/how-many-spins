@@ -6,8 +6,11 @@ export class EarthRotationCalculator {
   // 恒星日（ミリ秒）: 23時間56分4秒 = 86,164秒
   private static readonly SIDEREAL_DAY_MS = 86164000;
   
-  // 計算開始基準日: 西暦1年1月1日 00:00:00 UTC
-  private static readonly EPOCH_START = new Date('0001-01-01T00:00:00.000Z');
+  // 計算開始基準日: Unix epoch (1970年1月1日) 00:00:00 UTC
+  // 西暦1年1月1日からの累積回転数を加算して整合性を保つ
+  private static readonly EPOCH_START = new Date('1970-01-01T00:00:00.000Z');
+  // 西暦1年1月1日から1970年1月1日までの回転数
+  private static readonly HISTORICAL_ROTATIONS = 719163.0;
 
   /**
    * 指定された日時での地球の累積自転回数を計算
@@ -20,10 +23,13 @@ export class EarthRotationCalculator {
     }
 
     const timeDiff = date.getTime() - EarthRotationCalculator.EPOCH_START.getTime();
-    const rotations = timeDiff / EarthRotationCalculator.SIDEREAL_DAY_MS;
+    const rotationsFromEpoch = timeDiff / EarthRotationCalculator.SIDEREAL_DAY_MS;
+    
+    // 西暦1年からの累積回転数を計算
+    const totalRotations = EarthRotationCalculator.HISTORICAL_ROTATIONS + rotationsFromEpoch;
     
     // 小数点第6位まで精度を保持
-    return Math.round(rotations * 1000000) / 1000000;
+    return Math.round(totalRotations * 1000000) / 1000000;
   }
 
   /**
@@ -36,7 +42,9 @@ export class EarthRotationCalculator {
       throw new Error('無効な回転数が指定されました');
     }
 
-    const milliseconds = rotations * EarthRotationCalculator.SIDEREAL_DAY_MS;
+    // 西暦1年からの累積回転数から1970年以降の回転数を算出
+    const rotationsFromEpoch = rotations - EarthRotationCalculator.HISTORICAL_ROTATIONS;
+    const milliseconds = rotationsFromEpoch * EarthRotationCalculator.SIDEREAL_DAY_MS;
     const targetTime = EarthRotationCalculator.EPOCH_START.getTime() + milliseconds;
     
     return new Date(targetTime);

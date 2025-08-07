@@ -12,12 +12,19 @@ describe('TauntGenerator', () => {
     generator = new TauntGenerator();
     jest.clearAllMocks();
     
+    // console.warnをモック化してテスト出力をクリーンにする
+    jest.spyOn(console, 'warn').mockImplementation(() => {});
+    
     // 各テスト前にクリップボードAPIを復元
     Object.assign(navigator, {
       clipboard: {
         writeText: jest.fn(() => Promise.resolve()),
       },
     });
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
 
   describe('generateTaunt', () => {
