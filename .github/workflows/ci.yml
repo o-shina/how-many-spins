@@ -2,7 +2,7 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main, fix/github-pages-deploy-v2 ]
+    branches: [ main ]
   pull_request:
     branches: [ main ]
     types: [opened, synchronize, reopened]
@@ -54,12 +54,11 @@ jobs:
       if: matrix.node-version == '20.x'
       run: npx playwright install --with-deps chromium
     
-    # Temporarily disabled for GitHub Pages basePath testing
-    # - name: Run E2E tests
-    #   if: matrix.node-version == '20.x'
-    #   run: npm run test:e2e -- --project=chromium
-    #   env:
-    #     CI: true
+    - name: Run E2E tests
+      if: matrix.node-version == '20.x'
+      run: npm run test:e2e -- --project=chromium
+      env:
+        CI: true
     
     - name: Upload E2E test results
       if: failure() && matrix.node-version == '20.x'
@@ -72,7 +71,7 @@ jobs:
   deploy:
     needs: test
     runs-on: ubuntu-latest
-    if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/fix/github-pages-deploy-v2') && github.event_name == 'push'
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     
     permissions:
       contents: read
