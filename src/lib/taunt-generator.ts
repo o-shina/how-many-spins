@@ -3,6 +3,12 @@
  */
 export class TauntGenerator {
   /**
+   * 日本語曜日名の定数配列
+   */
+  private static readonly WEEKDAYS_JA = [
+    '日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'
+  ] as const;
+  /**
    * 煽りフレーズを生成する
    * @param date 対象の日時
    * @param rotations 回転数
@@ -49,8 +55,7 @@ export class TauntGenerator {
    * @returns 曜日名
    */
   private getWeekdayName(dayOfWeek: number): string {
-    const weekdays = ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'];
-    return weekdays[dayOfWeek] || '曜日';
+    return TauntGenerator.WEEKDAYS_JA[dayOfWeek] || '曜日';
   }
 
   /**

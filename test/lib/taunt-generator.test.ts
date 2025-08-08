@@ -1,6 +1,6 @@
 import { TauntGenerator } from '@/lib/taunt-generator';
 
-// document.execCommandのモック
+// Mock for document.execCommand
 Object.assign(document, {
   execCommand: jest.fn(() => true),
 });

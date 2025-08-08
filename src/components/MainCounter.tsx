@@ -46,15 +46,28 @@ function MainCounter() {
 
   // 初期データ読み込みとリアルタイム更新
   useEffect(() => {
+    let animationFrameId: number;
+    let lastUpdate = Date.now();
+
     // 初期データを即座に更新
     updateRotationData();
 
-    // 1秒間隔でリアルタイム更新
-    const interval = setInterval(() => {
-      updateRotationData();
-    }, 1000);
+    // requestAnimationFrame で1秒ごとに更新
+    const tick = () => {
+      const now = Date.now();
+      if (now - lastUpdate >= 1000) {
+        updateRotationData();
+        lastUpdate = now;
+      }
+      animationFrameId = requestAnimationFrame(tick);
+    };
+    animationFrameId = requestAnimationFrame(tick);
 
-    return () => clearInterval(interval);
+    return () => {
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+    };
   }, [updateRotationData]);
 
   if (isLoading) {

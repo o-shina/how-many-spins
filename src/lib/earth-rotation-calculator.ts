@@ -9,7 +9,18 @@ export class EarthRotationCalculator {
   // 計算開始基準日: Unix epoch (1970年1月1日) 00:00:00 UTC
   // 西暦1年1月1日からの累積回転数を加算して整合性を保つ
   private static readonly EPOCH_START = new Date('1970-01-01T00:00:00.000Z');
-  // 西暦1年1月1日から1970年1月1日までの回転数
+  /**
+   * 西暦1年1月1日から1970年1月1日までの地球の累積自転回数（恒星日基準）
+   * 
+   * 計算方法:
+   * - 基準日: 1年1月1日 00:00:00 UTC から 1970年1月1日 00:00:00 UTC までの経過日数を求める
+   * - グレゴリオ暦の規則に従い、両日付の間の日数は 719,163 日
+   *   - 参考: https://howardhinnant.github.io/date_algorithms.html#days_from_civil
+   *   - 参考: "Astronomical Algorithms" (Jean Meeus) Table 7.A
+   * - 恒星日（1日 = 86,164秒）を基準とするため、日数 = 回転数とみなす
+   * 
+   * よって、HISTORICAL_ROTATIONS = 719,163.0
+   */
   private static readonly HISTORICAL_ROTATIONS = 719163.0;
 
   /**

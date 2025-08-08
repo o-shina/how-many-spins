@@ -8,7 +8,7 @@ describe('EarthRotationCalculator', () => {
   });
 
   describe('calculateRotationsFromDate', () => {
-    test('恒星日（86164秒）後に1回転を返すこと', () => {
+    test('Returns 1 rotation after one sidereal day (86164 seconds)', () => {
       const baseDate = new Date('2025-01-01T00:00:00.000Z');
       const oneSiderealDay = new Date(baseDate.getTime() + 86164000);
       const baseRotations = calculator.calculateRotationsFromDate(baseDate);
@@ -16,7 +16,7 @@ describe('EarthRotationCalculator', () => {
       expect(result - baseRotations).toBeCloseTo(1, 6);
     });
 
-    test('現在日時で正の回転数を返すこと', () => {
+    test('Returns positive rotation count for current date', () => {
       const now = new Date();
       const result = calculator.calculateRotationsFromDate(now);
       expect(result).toBeGreaterThan(0);
