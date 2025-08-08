@@ -63,8 +63,9 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'npm run build && npx serve@latest out -p 3000',
+    command: 'npm run build && cd out && python3 -m http.server 3000',
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
+    timeout: 120000,
   },
 });

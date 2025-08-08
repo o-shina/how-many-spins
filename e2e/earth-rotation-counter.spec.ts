@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Earth Rotation Counter E2E Tests', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/');
+    await page.goto('/how-many-spins/');
   });
 
   test('should display the main title and description', async ({ page }) => {
