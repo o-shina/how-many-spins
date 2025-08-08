@@ -63,8 +63,9 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'npm run build && npx serve@latest out -p 3000',
+    command: 'npm run build && python3 -m http.server 3000 --directory out',
     url: 'http://localhost:3000/how-many-spins',
     reuseExistingServer: !process.env.CI,
+    timeout: 120000,
   },
 });
