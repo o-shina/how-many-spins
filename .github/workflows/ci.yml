@@ -54,7 +54,8 @@ jobs:
       if: matrix.node-version == '20.x'
       run: npx playwright install --with-deps chromium
     
-    # E2E tests require additional basePath configuration work
+    # E2E tests temporarily disabled - See Issue #9
+    # TODO: Fix E2E tests for GitHub Pages basePath configuration
     # Application functionality fully verified with 112 unit/integration tests
     # - name: Run E2E tests
     #   if: matrix.node-version == '20.x'
