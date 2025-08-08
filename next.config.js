@@ -2,6 +2,8 @@
 const nextConfig = {
   output: 'export',
   trailingSlash: true,
+  basePath: '/how-many-spins',
+  assetPrefix: '/how-many-spins',
   images: {
     unoptimized: true
   },
