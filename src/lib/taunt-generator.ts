@@ -29,6 +29,24 @@ export class TauntGenerator {
   }
 
   /**
+   * 煽りフレーズを生成する（フォーマット済み回転数版）
+   * @param date 対象の日時
+   * @param formattedRotations フォーマット済み回転数文字列
+   * @returns 生成された煽りフレーズ
+   */
+  generateTauntWithFormattedRotations(date: Date, formattedRotations: string): string {
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const weekday = this.getWeekdayName(date.getDay());
+    const hour = date.getHours();
+    const minute = date.getMinutes();
+    const second = date.getSeconds();
+    
+    return `いつ？${year}年${month}月${day}日${weekday}？${hour}時${minute}分${second}秒？地球が${formattedRotations}回転したとき！`;
+  }
+
+  /**
    * テキストをクリップボードにコピーする
    * @param text コピーするテキスト
    * @returns コピー成功時はtrue、失敗時はfalse

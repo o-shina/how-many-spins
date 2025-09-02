@@ -4,6 +4,7 @@ import { useState, useCallback, useMemo, memo } from 'react';
 import { TauntGenerator } from '@/lib/taunt-generator';
 import { EarthRotationCalculator } from '@/lib/earth-rotation-calculator';
 import { TauntData } from '@/types/earth-rotation';
+import { useDisplayFormat } from '@/hooks/useDisplayFormat';
 
 /**
  * 煽りフレーズ生成・表示パネルコンポーネント
@@ -16,6 +17,7 @@ function TauntPanel() {
 
   const tauntGenerator = useMemo(() => new TauntGenerator(), []);
   const calculator = useMemo(() => new EarthRotationCalculator(), []);
+  const { formatRotation } = useDisplayFormat();
 
   /**
    * 煽りフレーズを生成する
@@ -28,7 +30,8 @@ function TauntPanel() {
     try {
       const now = new Date();
       const rotations = calculator.calculateRotationsFromDate(now);
-      const phrase = tauntGenerator.generateTaunt(now, rotations);
+      const formattedRotations = formatRotation(rotations);
+      const phrase = tauntGenerator.generateTauntWithFormattedRotations(now, formattedRotations);
 
       const newTauntData: TauntData = {
         phrase,
@@ -44,7 +47,7 @@ function TauntPanel() {
     } finally {
       setIsGenerating(false);
     }
-  }, [tauntGenerator, calculator]);
+  }, [tauntGenerator, calculator, formatRotation]);
 
   /**
    * フレーズをクリップボードにコピーする
@@ -147,7 +150,7 @@ function TauntPanel() {
           {/* 生成情報 */}
           <div className="text-xs text-gray-500 text-center space-y-1">
             <p>生成時刻: {tauntData.timestamp.toLocaleString('ja-JP')}</p>
-            <p>回転数: {tauntData.rotations.toLocaleString('ja-JP', { maximumFractionDigits: 0 })} 回転</p>
+            <p>回転数: {formatRotation(tauntData.rotations)} 回転</p>
           </div>
         </div>
       )}
