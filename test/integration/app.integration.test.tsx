@@ -21,9 +21,9 @@ describe('App Integration Tests', () => {
       expect(screen.getByText('地球の累積自転回数')).toBeInTheDocument();
     });
     
-    // 回転数が数値として表示されていること
+    // 回転数が数値として表示されていること（デフォルトは整数表示）
     await waitFor(() => {
-      const rotationElement = screen.getByText(/\d{1,3}(,\d{3})*\.\d{6} 回転/);
+      const rotationElement = screen.getByText(/\d{1,3}(,\d{3})* 回転/);
       expect(rotationElement).toBeInTheDocument();
     });
     
@@ -49,13 +49,13 @@ describe('App Integration Tests', () => {
   test('リアルタイムカウンターが継続的に更新されること', async () => {
     render(<HomePage />);
     
-    // カウンターの初期化を待つ
+    // カウンターの初期化を待つ（デフォルトは整数表示）
     await waitFor(() => {
-      expect(screen.getByText(/\d{1,3}(,\d{3})*\.\d{6} 回転/)).toBeInTheDocument();
+      expect(screen.getByText(/\d{1,3}(,\d{3})* 回転/)).toBeInTheDocument();
     });
     
     // 最初の回転数を取得
-    const initialRotationElement = screen.getByText(/\d{1,3}(,\d{3})*\.\d{6} 回転/);
+    const initialRotationElement = screen.getByText(/\d{1,3}(,\d{3})* 回転/);
     const initialRotationText = initialRotationElement.textContent;
     
     // 2秒待機してカウンターの更新を確認
@@ -65,7 +65,7 @@ describe('App Integration Tests', () => {
     
     // 回転数の表示が存在し続けることを確認（実際の変更は微小なので存在確認）
     await waitFor(() => {
-      const updatedRotationElement = screen.getByText(/\d{1,3}(,\d{3})*\.\d{6} 回転/);
+      const updatedRotationElement = screen.getByText(/\d{1,3}(,\d{3})* 回転/);
       expect(updatedRotationElement).toBeInTheDocument();
     });
     
@@ -98,7 +98,7 @@ describe('App Integration Tests', () => {
     
     // メインカウンターが初期化されるまで待機
     await waitFor(() => {
-      expect(screen.getByText(/\d{1,3}(,\d{3})*\.\d{6} 回転/)).toBeInTheDocument();
+      expect(screen.getByText(/\d{1,3}(,\d{3})* 回転/)).toBeInTheDocument();
     });
     
     // 煽りフレーズを生成
@@ -145,7 +145,7 @@ describe('App Integration Tests', () => {
     
     // 回転数表示の存在を確認（CSSクラスチェックは省略）
     await waitFor(() => {
-      const rotationDisplay = screen.getByText(/\d{1,3}(,\d{3})*\.\d{6} 回転/);
+      const rotationDisplay = screen.getByText(/\d{1,3}(,\d{3})* 回転/);
       expect(rotationDisplay).toBeInTheDocument();
     });
   });

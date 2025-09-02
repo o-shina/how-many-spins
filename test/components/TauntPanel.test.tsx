@@ -7,6 +7,7 @@ jest.mock('@/lib/taunt-generator', () => {
   return {
     TauntGenerator: jest.fn().mockImplementation(() => ({
       generateTaunt: jest.fn().mockReturnValue('いつ？2025年8月7日（木）14時37分24秒？地球が1,234,567回転したとき！'),
+      generateTauntWithFormattedRotations: jest.fn().mockReturnValue('いつ？2025年8月7日（木）14時37分24秒？地球が1,234,567回転したとき！'),
       copyToClipboard: jest.fn().mockResolvedValue(true),
     })),
   };

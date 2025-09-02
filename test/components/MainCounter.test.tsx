@@ -39,7 +39,10 @@ describe('MainCounter', () => {
       await waitFor(() => {
         expect(screen.getByText('現在時刻')).toBeInTheDocument();
         expect(screen.getByText('地球の累積自転回数')).toBeInTheDocument();
-        expect(screen.getByText('1,234,567.123456 回転')).toBeInTheDocument();
+        // デフォルトは整数表示
+        expect(screen.getByText('1,234,567 回転')).toBeInTheDocument();
+        // 表示形式切り替えトグルが表示されている
+        expect(screen.getByText('表示形式:')).toBeInTheDocument();
       });
     });
 
@@ -86,7 +89,7 @@ describe('MainCounter', () => {
       render(<MainCounter />);
       
       await waitFor(() => {
-        const rotationDisplay = screen.getByText('1,234,567.123456 回転');
+        const rotationDisplay = screen.getByText('1,234,567 回転');
         expect(rotationDisplay).toHaveClass('text-3xl', 'md:text-5xl', 'lg:text-6xl');
         expect(rotationDisplay).toHaveClass('font-bold', 'font-mono');
       });

@@ -4,6 +4,8 @@ import { useState, useEffect, useCallback, useMemo, memo } from 'react';
 import { EarthRotationCalculator } from '@/lib/earth-rotation-calculator';
 import { formatDateTime } from '@/lib/date-formatter';
 import { EarthRotationData } from '@/types/earth-rotation';
+import { useDisplayFormat } from '@/hooks/useDisplayFormat';
+import DisplayFormatToggle from './DisplayFormatToggle';
 
 /**
  * メインカウンター表示コンポーネント
@@ -15,6 +17,7 @@ function MainCounter() {
   const [error, setError] = useState<string | null>(null);
 
   const calculator = useMemo(() => new EarthRotationCalculator(), []);
+  const { formatRotation, isLoaded: formatLoaded } = useDisplayFormat();
 
   /**
    * 回転データを更新する
@@ -70,7 +73,7 @@ function MainCounter() {
     };
   }, [updateRotationData]);
 
-  if (isLoading) {
+  if (isLoading || !formatLoaded) {
     return (
       <div className="text-center py-12">
         <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mb-4"></div>
@@ -113,6 +116,9 @@ function MainCounter() {
         </p>
       </div>
 
+      {/* 表示形式切り替えトグル */}
+      <DisplayFormatToggle />
+
       {/* 地球回転数表示 */}
       <div className="mb-4">
         <h2 className="text-lg md:text-xl font-semibold text-gray-700 mb-4">
@@ -120,7 +126,7 @@ function MainCounter() {
         </h2>
         <div className="bg-gradient-to-r from-blue-50 to-green-50 rounded-lg p-6 md:p-8 mx-4">
           <p className="text-3xl md:text-5xl lg:text-6xl font-bold text-blue-800 font-mono mb-2">
-            {rotationData.formattedRotations}
+            {formatRotation(rotationData.rotationCount)} 回転
           </p>
         </div>
       </div>
