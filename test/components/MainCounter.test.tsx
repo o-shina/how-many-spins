@@ -1,5 +1,7 @@
 import { render, screen, waitFor, act } from '@testing-library/react';
 import MainCounter from '@/components/MainCounter';
+import { DisplayFormatProvider } from '@/context/DisplayFormatContext';
+import React from 'react';
 
 // タイマーをモック化
 jest.useFakeTimers();
@@ -17,6 +19,12 @@ jest.mock('@/lib/earth-rotation-calculator', () => {
 });
 
 describe('MainCounter', () => {
+  const renderWithProvider = (component: React.ReactElement) => {
+    return render(
+      <DisplayFormatProvider>{component}</DisplayFormatProvider>
+    );
+  };
+
   afterEach(() => {
     jest.clearAllMocks();
     jest.clearAllTimers();
@@ -24,7 +32,7 @@ describe('MainCounter', () => {
 
   describe('初期表示', () => {
     test('読み込み中の状態を表示すること', async () => {
-      render(<MainCounter />);
+      renderWithProvider(<MainCounter />);
       
       // 非同期コンポーネントなので、一瞬でもローディング状態を確認
       // または実際のレンダリング結果を確認
@@ -34,7 +42,7 @@ describe('MainCounter', () => {
     });
 
     test('データ読み込み後に正しい内容を表示すること', async () => {
-      render(<MainCounter />);
+      renderWithProvider(<MainCounter />);
       
       await waitFor(() => {
         expect(screen.getByText('現在時刻')).toBeInTheDocument();
@@ -47,7 +55,7 @@ describe('MainCounter', () => {
     });
 
     test('計算基準の説明を表示すること', async () => {
-      render(<MainCounter />);
+      renderWithProvider(<MainCounter />);
       
       await waitFor(() => {
         expect(screen.getByText(/西暦1年1月1日 00:00 UTC = 0回転/)).toBeInTheDocument();
@@ -56,7 +64,7 @@ describe('MainCounter', () => {
     });
 
     test('リアルタイム更新インジケーターを表示すること', async () => {
-      render(<MainCounter />);
+      renderWithProvider(<MainCounter />);
       
       await waitFor(() => {
         expect(screen.getByText('リアルタイム更新中')).toBeInTheDocument();
@@ -66,7 +74,7 @@ describe('MainCounter', () => {
 
   describe('アクセシビリティ', () => {
     test('適切な見出し要素が使用されていること', async () => {
-      render(<MainCounter />);
+      renderWithProvider(<MainCounter />);
       
       await waitFor(() => {
         expect(screen.getByRole('heading', { name: '現在時刻' })).toBeInTheDocument();
@@ -75,7 +83,7 @@ describe('MainCounter', () => {
     });
 
     test('読み込み状態が適切に通知されること', async () => {
-      render(<MainCounter />);
+      renderWithProvider(<MainCounter />);
       
       // 実際には計算が瞬時に終了するため、結果を確認
       await waitFor(() => {
@@ -86,7 +94,7 @@ describe('MainCounter', () => {
 
   describe('レスポンシブデザイン', () => {
     test('適切なCSSクラスが適用されていること', async () => {
-      render(<MainCounter />);
+      renderWithProvider(<MainCounter />);
       
       await waitFor(() => {
         const rotationDisplay = screen.getByText('1,234,567 回転');
