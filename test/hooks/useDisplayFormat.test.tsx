@@ -1,5 +1,7 @@
 import { renderHook, act } from '@testing-library/react';
 import { useDisplayFormat } from '@/hooks/useDisplayFormat';
+import { DisplayFormatProvider } from '@/context/DisplayFormatContext';
+import React from 'react';
 
 // localStorage のモック
 const localStorageMock = {
@@ -22,7 +24,11 @@ describe('useDisplayFormat', () => {
   test('デフォルトで整数表示モードになること', () => {
     localStorageMock.getItem.mockReturnValue(null);
     
-    const { result } = renderHook(() => useDisplayFormat());
+    const wrapper = ({ children }: { children: React.ReactNode }) => (
+      <DisplayFormatProvider>{children}</DisplayFormatProvider>
+    );
+    
+    const { result } = renderHook(() => useDisplayFormat(), { wrapper });
     
     expect(result.current.format).toBe('integer');
     expect(result.current.isInteger).toBe(true);
@@ -33,7 +39,11 @@ describe('useDisplayFormat', () => {
   test('ローカルストレージから設定を読み込むこと', () => {
     localStorageMock.getItem.mockReturnValue('decimal');
     
-    const { result } = renderHook(() => useDisplayFormat());
+    const wrapper = ({ children }: { children: React.ReactNode }) => (
+      <DisplayFormatProvider>{children}</DisplayFormatProvider>
+    );
+    
+    const { result } = renderHook(() => useDisplayFormat(), { wrapper });
     
     expect(result.current.format).toBe('decimal');
     expect(result.current.isInteger).toBe(false);
@@ -44,7 +54,11 @@ describe('useDisplayFormat', () => {
   test('toggleFormat で表示形式が切り替わること', () => {
     localStorageMock.getItem.mockReturnValue(null);
     
-    const { result } = renderHook(() => useDisplayFormat());
+    const wrapper = ({ children }: { children: React.ReactNode }) => (
+      <DisplayFormatProvider>{children}</DisplayFormatProvider>
+    );
+    
+    const { result } = renderHook(() => useDisplayFormat(), { wrapper });
     
     expect(result.current.format).toBe('integer');
     
@@ -61,7 +75,11 @@ describe('useDisplayFormat', () => {
   test('整数表示で正しくフォーマットされること', () => {
     localStorageMock.getItem.mockReturnValue('integer');
     
-    const { result } = renderHook(() => useDisplayFormat());
+    const wrapper = ({ children }: { children: React.ReactNode }) => (
+      <DisplayFormatProvider>{children}</DisplayFormatProvider>
+    );
+    
+    const { result } = renderHook(() => useDisplayFormat(), { wrapper });
     
     const formatted = result.current.formatRotation(1234567.123456);
     expect(formatted).toBe('1,234,567');
@@ -70,7 +88,11 @@ describe('useDisplayFormat', () => {
   test('小数表示で正しくフォーマットされること', () => {
     localStorageMock.getItem.mockReturnValue('decimal');
     
-    const { result } = renderHook(() => useDisplayFormat());
+    const wrapper = ({ children }: { children: React.ReactNode }) => (
+      <DisplayFormatProvider>{children}</DisplayFormatProvider>
+    );
+    
+    const { result } = renderHook(() => useDisplayFormat(), { wrapper });
     
     const formatted = result.current.formatRotation(1234567.123456);
     expect(formatted).toBe('1,234,567.123456');
@@ -81,7 +103,11 @@ describe('useDisplayFormat', () => {
       throw new Error('localStorage error');
     });
     
-    const { result } = renderHook(() => useDisplayFormat());
+    const wrapper = ({ children }: { children: React.ReactNode }) => (
+      <DisplayFormatProvider>{children}</DisplayFormatProvider>
+    );
+    
+    const { result } = renderHook(() => useDisplayFormat(), { wrapper });
     
     expect(result.current.format).toBe('integer');
     expect(result.current.isLoaded).toBe(true);
@@ -93,7 +119,11 @@ describe('useDisplayFormat', () => {
       throw new Error('localStorage error');
     });
     
-    const { result } = renderHook(() => useDisplayFormat());
+    const wrapper = ({ children }: { children: React.ReactNode }) => (
+      <DisplayFormatProvider>{children}</DisplayFormatProvider>
+    );
+    
+    const { result } = renderHook(() => useDisplayFormat(), { wrapper });
     
     expect(result.current.format).toBe('integer');
     
@@ -108,7 +138,11 @@ describe('useDisplayFormat', () => {
   test('不正なローカルストレージ値でもデフォルト値を使用すること', () => {
     localStorageMock.getItem.mockReturnValue('invalid-value');
     
-    const { result } = renderHook(() => useDisplayFormat());
+    const wrapper = ({ children }: { children: React.ReactNode }) => (
+      <DisplayFormatProvider>{children}</DisplayFormatProvider>
+    );
+    
+    const { result } = renderHook(() => useDisplayFormat(), { wrapper });
     
     expect(result.current.format).toBe('integer');
   });

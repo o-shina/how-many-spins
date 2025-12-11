@@ -14,11 +14,12 @@ jest.mock('@/components/MainCounter', () => {
   };
 });
 
-jest.mock('@/components/TauntPanel', () => {
-  return function MockTauntPanel() {
-    return <div data-testid="taunt-panel">TauntPanel</div>;
-  };
-});
+// TauntPanelは一時的に非表示
+// jest.mock('@/components/TauntPanel', () => {
+//   return function MockTauntPanel() {
+//     return <div data-testid="taunt-panel">TauntPanel</div>;
+//   };
+// });
 
 jest.mock('@/components/Footer', () => {
   return function MockFooter() {
@@ -26,13 +27,27 @@ jest.mock('@/components/Footer', () => {
   };
 });
 
+// DisplayFormatProviderをモック
+jest.mock('@/context/DisplayFormatContext', () => ({
+  DisplayFormatProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  useDisplayFormat: () => ({
+    format: 'integer',
+    isLoaded: true,
+    toggleFormat: jest.fn(),
+    formatRotation: (n: number) => Math.floor(n).toLocaleString('ja-JP'),
+    isInteger: true,
+    isDecimal: false,
+  }),
+}));
+
 describe('HomePage', () => {
   test('すべてのコンポーネントが正しく表示されること', () => {
     render(<HomePage />);
     
     expect(screen.getByTestId('header')).toBeInTheDocument();
     expect(screen.getByTestId('main-counter')).toBeInTheDocument();
-    expect(screen.getByTestId('taunt-panel')).toBeInTheDocument();
+    // TauntPanelは一時的に非表示
+    // expect(screen.getByTestId('taunt-panel')).toBeInTheDocument();
     expect(screen.getByTestId('footer')).toBeInTheDocument();
   });
 
@@ -52,13 +67,11 @@ describe('HomePage', () => {
     const { container } = render(<HomePage />);
     
     const sections = container.querySelectorAll('section');
-    expect(sections).toHaveLength(2);
+    // TauntPanelは一時的に非表示なので、セクションは1つのみ
+    expect(sections).toHaveLength(1);
     
     // メインカウンターセクション
     expect(sections[0]).toHaveClass('mb-12');
-    
-    // タントパネルセクション（2つ目のセクション）
-    expect(sections[1]).toBeInTheDocument();
   });
 
   test('コンテナの最大幅が設定されていること', () => {

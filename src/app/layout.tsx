@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import '@/app/globals.css';
 
 export const metadata: Metadata = {
@@ -6,7 +6,6 @@ export const metadata: Metadata = {
   description: '子どもの煽りフレーズ「いつ？何年何月何日何曜日？何時何分何秒？地球が何回回ったとき？」に即座に答えるWebアプリケーション',
   keywords: '地球, 自転, 回転数, 煽り, フレーズ, 時間, 計算, リアルタイム',
   authors: [{ name: 'How Many Spins Team' }],
-  viewport: 'width=device-width, initial-scale=1',
   robots: 'index, follow',
   openGraph: {
     title: '地球が何回回った時？ | How Many Spins?',
@@ -14,6 +13,11 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'ja_JP',
   },
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
 };
 
 export default function RootLayout({

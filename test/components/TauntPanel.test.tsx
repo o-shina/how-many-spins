@@ -21,6 +21,18 @@ jest.mock('@/lib/earth-rotation-calculator', () => {
   };
 });
 
+// useDisplayFormatをモック化
+jest.mock('@/hooks/useDisplayFormat', () => ({
+  useDisplayFormat: () => ({
+    format: 'integer',
+    isLoaded: true,
+    toggleFormat: jest.fn(),
+    formatRotation: (n: number) => Math.floor(n).toLocaleString('ja-JP'),
+    isInteger: true,
+    isDecimal: false,
+  }),
+}));
+
 describe('TauntPanel', () => {
   beforeEach(() => {
     jest.clearAllMocks();

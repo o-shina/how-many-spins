@@ -1,9 +1,11 @@
 /** @type {import('next').NextConfig} */
+const isProd = process.env.NODE_ENV === 'production';
+
 const nextConfig = {
   output: 'export',
   trailingSlash: true,
-  basePath: '/how-many-spins',
-  assetPrefix: '/how-many-spins',
+  basePath: isProd ? '/how-many-spins' : '',
+  assetPrefix: isProd ? '/how-many-spins' : '',
   images: {
     unoptimized: true
   },

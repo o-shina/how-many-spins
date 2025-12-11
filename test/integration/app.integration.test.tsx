@@ -27,19 +27,19 @@ describe('App Integration Tests', () => {
       expect(rotationElement).toBeInTheDocument();
     });
     
-    // 煽りフレーズ生成機能が動作すること
-    const generateButton = screen.getByText('煽りフレーズを生成');
-    expect(generateButton).toBeInTheDocument();
-    
-    await user.click(generateButton);
-    
-    await waitFor(() => {
-      // 生成されたフレーズが表示されること
-      expect(screen.getByText(/いつ？.*？地球が.*回転したとき！/)).toBeInTheDocument();
-      // アクションボタンが表示されること
-      expect(screen.getByText('📋 コピー')).toBeInTheDocument();
-      expect(screen.getByText('🔄 再生成')).toBeInTheDocument();
-    });
+    // TauntPanelは一時的に非表示なので、煽りフレーズ生成機能のテストはスキップ
+    // const generateButton = screen.getByText('煽りフレーズを生成');
+    // expect(generateButton).toBeInTheDocument();
+    // 
+    // await user.click(generateButton);
+    // 
+    // await waitFor(() => {
+    //   // 生成されたフレーズが表示されること
+    //   expect(screen.getByText(/いつ？.*？地球が.*回転したとき！/)).toBeInTheDocument();
+    //   // アクションボタンが表示されること
+    //   expect(screen.getByText('📋 コピー')).toBeInTheDocument();
+    //   expect(screen.getByText('🔄 再生成')).toBeInTheDocument();
+    // });
     
     // フッターが表示されること
     expect(screen.getByText('子どもの煽りフレーズに即答するWebアプリケーション')).toBeInTheDocument();
@@ -81,7 +81,8 @@ describe('App Integration Tests', () => {
     
     // エラー状態でも基本的なUIが表示されること
     expect(screen.getByRole('heading', { level: 1, name: '地球が何回回った時？' })).toBeInTheDocument();
-    expect(screen.getByText('煽りフレーズ生成')).toBeInTheDocument();
+    // TauntPanelは一時的に非表示
+    // expect(screen.getByText('煽りフレーズ生成')).toBeInTheDocument();
     
     // 正常状態でもテストは成功とする（エラー注入は複雑すぎるため）
     await waitFor(() => {
@@ -91,7 +92,8 @@ describe('App Integration Tests', () => {
     mockConsoleError.mockRestore();
   }, 10000);
 
-  test('コンポーネント間のデータ連携が正しく動作すること', async () => {
+  // TauntPanelが一時的に非表示なので、このテストはスキップ
+  test.skip('コンポーネント間のデータ連携が正しく動作すること', async () => {
     const user = userEvent.setup();
     
     render(<HomePage />);
