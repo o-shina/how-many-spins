@@ -17,7 +17,7 @@ describe('App Integration Tests', () => {
     
     // メインカウンターが正しく初期化されること
     await waitFor(() => {
-      expect(screen.getByText('現在時刻')).toBeInTheDocument();
+      expect(screen.getByRole('heading', { name: '現在時刻' })).toBeInTheDocument();
       expect(screen.getByText('地球の累積自転回数')).toBeInTheDocument();
     });
     
@@ -86,7 +86,7 @@ describe('App Integration Tests', () => {
     
     // 正常状態でもテストは成功とする（エラー注入は複雑すぎるため）
     await waitFor(() => {
-      expect(screen.getByText('現在時刻')).toBeInTheDocument();
+      expect(screen.getByText('地球の累積自転回数')).toBeInTheDocument();
     });
     
     mockConsoleError.mockRestore();

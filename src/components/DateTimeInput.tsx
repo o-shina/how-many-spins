@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, memo } from 'react';
+import { useState, useCallback, useMemo, memo } from 'react';
 import { EarthRotationCalculator } from '@/lib/earth-rotation-calculator';
 import { formatDateTime } from '@/lib/date-formatter';
 import { useDisplayFormat } from '@/hooks/useDisplayFormat';
@@ -37,7 +37,7 @@ function DateTimeInput() {
   const [error, setError] = useState<string | null>(null);
   const [isCalculating, setIsCalculating] = useState(false);
 
-  const calculator = new EarthRotationCalculator();
+  const calculator = useMemo(() => new EarthRotationCalculator(), []);
   const { formatRotation, isLoaded: formatLoaded } = useDisplayFormat();
 
   /**
