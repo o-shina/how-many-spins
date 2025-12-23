@@ -21,11 +21,14 @@ interface CalculationResult {
   isFuture: boolean;
 }
 
+type InputMode = 'text' | 'select';
+
 /**
  * 日時指定入力コンポーネント
  * 任意の日時を入力して地球の回転数を計算
  */
 function DateTimeInput() {
+  const [inputMode, setInputMode] = useState<InputMode>('select');
   const [inputValues, setInputValues] = useState<DateTimeInputValues>({
     year: '',
     month: '',
@@ -39,6 +42,46 @@ function DateTimeInput() {
 
   const calculator = useMemo(() => new EarthRotationCalculator(), []);
   const { formatRotation, isLoaded: formatLoaded } = useDisplayFormat();
+
+  /**
+   * 年の選択肢を生成（現在年の±100年）
+   */
+  const yearOptions = useMemo(() => {
+    const currentYear = new Date().getFullYear();
+    const years: number[] = [];
+    for (let y = currentYear - 100; y <= currentYear + 100; y++) {
+      years.push(y);
+    }
+    return years;
+  }, []);
+
+  /**
+   * 月の選択肢（1-12）
+   */
+  const monthOptions = useMemo(() => {
+    return Array.from({ length: 12 }, (_, i) => i + 1);
+  }, []);
+
+  /**
+   * 日の選択肢（1-31）
+   */
+  const dayOptions = useMemo(() => {
+    return Array.from({ length: 31 }, (_, i) => i + 1);
+  }, []);
+
+  /**
+   * 時の選択肢（0-23）
+   */
+  const hourOptions = useMemo(() => {
+    return Array.from({ length: 24 }, (_, i) => i);
+  }, []);
+
+  /**
+   * 分の選択肢（0-59）
+   */
+  const minuteOptions = useMemo(() => {
+    return Array.from({ length: 60 }, (_, i) => i);
+  }, []);
 
   /**
    * 入力値を更新
@@ -181,6 +224,42 @@ function DateTimeInput() {
           指定した日時の地球回転数を計算
         </h2>
 
+        {/* 入力モード切り替え */}
+        <div className="flex justify-center mb-6">
+          <div className="inline-flex rounded-lg border border-gray-300 bg-gray-50 p-1">
+            <button
+              type="button"
+              onClick={() => setInputMode('select')}
+              className={`
+                px-4 py-2 text-sm font-medium rounded-md transition-all duration-200
+                ${inputMode === 'select'
+                  ? 'bg-white text-blue-600 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900'
+                }
+              `}
+              aria-pressed={inputMode === 'select'}
+              aria-label="プルダウン入力に切り替え"
+            >
+              プルダウン
+            </button>
+            <button
+              type="button"
+              onClick={() => setInputMode('text')}
+              className={`
+                px-4 py-2 text-sm font-medium rounded-md transition-all duration-200
+                ${inputMode === 'text'
+                  ? 'bg-white text-blue-600 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900'
+                }
+              `}
+              aria-pressed={inputMode === 'text'}
+              aria-label="テキスト入力に切り替え"
+            >
+              テキスト入力
+            </button>
+          </div>
+        </div>
+
         {/* 入力フォーム */}
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* 日付入力 */}
@@ -189,42 +268,103 @@ function DateTimeInput() {
               日付（UTC）
             </label>
             <div className="flex flex-wrap gap-2 items-center">
-              <div className="flex items-center">
-                <input
-                  type="text"
-                  value={inputValues.year}
-                  onChange={(e) => handleInputChange('year', e.target.value)}
-                  placeholder="2025"
-                  maxLength={4}
-                  className="w-20 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  aria-label="年"
-                />
-                <span className="ml-1 text-gray-600">年</span>
-              </div>
-              <div className="flex items-center">
-                <input
-                  type="text"
-                  value={inputValues.month}
-                  onChange={(e) => handleInputChange('month', e.target.value)}
-                  placeholder="12"
-                  maxLength={2}
-                  className="w-16 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  aria-label="月"
-                />
-                <span className="ml-1 text-gray-600">月</span>
-              </div>
-              <div className="flex items-center">
-                <input
-                  type="text"
-                  value={inputValues.day}
-                  onChange={(e) => handleInputChange('day', e.target.value)}
-                  placeholder="31"
-                  maxLength={2}
-                  className="w-16 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  aria-label="日"
-                />
-                <span className="ml-1 text-gray-600">日</span>
-              </div>
+              {inputMode === 'select' ? (
+                <>
+                  {/* プルダウン：年 */}
+                  <div className="flex items-center">
+                    <select
+                      value={inputValues.year}
+                      onChange={(e) => handleInputChange('year', e.target.value)}
+                      className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+                      aria-label="年"
+                    >
+                      <option value="">--</option>
+                      {yearOptions.map((y) => (
+                        <option key={y} value={y}>
+                          {y}
+                        </option>
+                      ))}
+                    </select>
+                    <span className="ml-1 text-gray-600">年</span>
+                  </div>
+                  {/* プルダウン：月 */}
+                  <div className="flex items-center">
+                    <select
+                      value={inputValues.month}
+                      onChange={(e) => handleInputChange('month', e.target.value)}
+                      className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+                      aria-label="月"
+                    >
+                      <option value="">--</option>
+                      {monthOptions.map((m) => (
+                        <option key={m} value={m}>
+                          {m}
+                        </option>
+                      ))}
+                    </select>
+                    <span className="ml-1 text-gray-600">月</span>
+                  </div>
+                  {/* プルダウン：日 */}
+                  <div className="flex items-center">
+                    <select
+                      value={inputValues.day}
+                      onChange={(e) => handleInputChange('day', e.target.value)}
+                      className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+                      aria-label="日"
+                    >
+                      <option value="">--</option>
+                      {dayOptions.map((d) => (
+                        <option key={d} value={d}>
+                          {d}
+                        </option>
+                      ))}
+                    </select>
+                    <span className="ml-1 text-gray-600">日</span>
+                  </div>
+                </>
+              ) : (
+                <>
+                  {/* テキスト入力：年 */}
+                  <div className="flex items-center">
+                    <input
+                      type="text"
+                      value={inputValues.year}
+                      onChange={(e) => handleInputChange('year', e.target.value)}
+                      placeholder="2025"
+                      maxLength={4}
+                      className="w-20 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      aria-label="年"
+                    />
+                    <span className="ml-1 text-gray-600">年</span>
+                  </div>
+                  {/* テキスト入力：月 */}
+                  <div className="flex items-center">
+                    <input
+                      type="text"
+                      value={inputValues.month}
+                      onChange={(e) => handleInputChange('month', e.target.value)}
+                      placeholder="12"
+                      maxLength={2}
+                      className="w-16 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      aria-label="月"
+                    />
+                    <span className="ml-1 text-gray-600">月</span>
+                  </div>
+                  {/* テキスト入力：日 */}
+                  <div className="flex items-center">
+                    <input
+                      type="text"
+                      value={inputValues.day}
+                      onChange={(e) => handleInputChange('day', e.target.value)}
+                      placeholder="31"
+                      maxLength={2}
+                      className="w-16 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      aria-label="日"
+                    />
+                    <span className="ml-1 text-gray-600">日</span>
+                  </div>
+                </>
+              )}
             </div>
           </div>
 
@@ -234,30 +374,73 @@ function DateTimeInput() {
               時刻（UTC）
             </label>
             <div className="flex flex-wrap gap-2 items-center">
-              <div className="flex items-center">
-                <input
-                  type="text"
-                  value={inputValues.hour}
-                  onChange={(e) => handleInputChange('hour', e.target.value)}
-                  placeholder="23"
-                  maxLength={2}
-                  className="w-16 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  aria-label="時"
-                />
-                <span className="ml-1 text-gray-600">時</span>
-              </div>
-              <div className="flex items-center">
-                <input
-                  type="text"
-                  value={inputValues.minute}
-                  onChange={(e) => handleInputChange('minute', e.target.value)}
-                  placeholder="59"
-                  maxLength={2}
-                  className="w-16 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  aria-label="分"
-                />
-                <span className="ml-1 text-gray-600">分</span>
-              </div>
+              {inputMode === 'select' ? (
+                <>
+                  {/* プルダウン：時 */}
+                  <div className="flex items-center">
+                    <select
+                      value={inputValues.hour}
+                      onChange={(e) => handleInputChange('hour', e.target.value)}
+                      className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+                      aria-label="時"
+                    >
+                      <option value="">--</option>
+                      {hourOptions.map((h) => (
+                        <option key={h} value={h}>
+                          {h}
+                        </option>
+                      ))}
+                    </select>
+                    <span className="ml-1 text-gray-600">時</span>
+                  </div>
+                  {/* プルダウン：分 */}
+                  <div className="flex items-center">
+                    <select
+                      value={inputValues.minute}
+                      onChange={(e) => handleInputChange('minute', e.target.value)}
+                      className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+                      aria-label="分"
+                    >
+                      <option value="">--</option>
+                      {minuteOptions.map((m) => (
+                        <option key={m} value={m}>
+                          {m}
+                        </option>
+                      ))}
+                    </select>
+                    <span className="ml-1 text-gray-600">分</span>
+                  </div>
+                </>
+              ) : (
+                <>
+                  {/* テキスト入力：時 */}
+                  <div className="flex items-center">
+                    <input
+                      type="text"
+                      value={inputValues.hour}
+                      onChange={(e) => handleInputChange('hour', e.target.value)}
+                      placeholder="23"
+                      maxLength={2}
+                      className="w-16 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      aria-label="時"
+                    />
+                    <span className="ml-1 text-gray-600">時</span>
+                  </div>
+                  {/* テキスト入力：分 */}
+                  <div className="flex items-center">
+                    <input
+                      type="text"
+                      value={inputValues.minute}
+                      onChange={(e) => handleInputChange('minute', e.target.value)}
+                      placeholder="59"
+                      maxLength={2}
+                      className="w-16 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      aria-label="分"
+                    />
+                    <span className="ml-1 text-gray-600">分</span>
+                  </div>
+                </>
+              )}
             </div>
           </div>
 

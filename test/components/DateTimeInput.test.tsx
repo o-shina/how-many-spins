@@ -39,6 +39,24 @@ describe('DateTimeInput', () => {
       });
     });
 
+    test('入力モード切り替えボタンが表示されること', async () => {
+      renderWithProvider(<DateTimeInput />);
+
+      await waitFor(() => {
+        expect(screen.getByRole('button', { name: /プルダウン入力に切り替え/i })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /テキスト入力に切り替え/i })).toBeInTheDocument();
+      });
+    });
+
+    test('初期状態はプルダウンモードであること', async () => {
+      renderWithProvider(<DateTimeInput />);
+
+      await waitFor(() => {
+        const selectButton = screen.getByRole('button', { name: /プルダウン入力に切り替え/i });
+        expect(selectButton).toHaveAttribute('aria-pressed', 'true');
+      });
+    });
+
     test('入力フィールドがすべて表示されること', async () => {
       renderWithProvider(<DateTimeInput />);
 
@@ -65,6 +83,56 @@ describe('DateTimeInput', () => {
 
       await waitFor(() => {
         expect(screen.queryByText('計算結果')).not.toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('入力モード切り替え', () => {
+    test('テキスト入力モードに切り替えられること', async () => {
+      renderWithProvider(<DateTimeInput />);
+
+      await waitFor(() => {
+        const textButton = screen.getByRole('button', { name: /テキスト入力に切り替え/i });
+        fireEvent.click(textButton);
+        expect(textButton).toHaveAttribute('aria-pressed', 'true');
+      });
+    });
+
+    test('プルダウンモードからテキストモードに切り替えると入力フィールドが変わること', async () => {
+      renderWithProvider(<DateTimeInput />);
+
+      await waitFor(() => {
+        // 初期状態（プルダウン）を確認
+        const yearSelect = screen.getByLabelText('年') as HTMLSelectElement;
+        expect(yearSelect.tagName).toBe('SELECT');
+
+        // テキストモードに切り替え
+        const textButton = screen.getByRole('button', { name: /テキスト入力に切り替え/i });
+        fireEvent.click(textButton);
+
+        // テキスト入力に変わったことを確認
+        const yearInput = screen.getByLabelText('年') as HTMLInputElement;
+        expect(yearInput.tagName).toBe('INPUT');
+        expect(yearInput.type).toBe('text');
+      });
+    });
+
+    test('入力値はモード切り替え後も保持されること', async () => {
+      renderWithProvider(<DateTimeInput />);
+
+      await waitFor(() => {
+        // プルダウンで値を選択
+        const yearSelect = screen.getByLabelText('年') as HTMLSelectElement;
+        fireEvent.change(yearSelect, { target: { value: '2025' } });
+        expect(yearSelect.value).toBe('2025');
+
+        // テキストモードに切り替え
+        const textButton = screen.getByRole('button', { name: /テキスト入力に切り替え/i });
+        fireEvent.click(textButton);
+
+        // 値が保持されていることを確認
+        const yearInput = screen.getByLabelText('年') as HTMLInputElement;
+        expect(yearInput.value).toBe('2025');
       });
     });
   });
