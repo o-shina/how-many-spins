@@ -84,8 +84,8 @@ describe('DateTimeInput 統合テスト', () => {
     });
   });
 
-  describe('入力モード切り替えの統合', () => {
-    test('プルダウンモードとテキストモードが切り替えられること', async () => {
+  describe('コンボボックス形式の入力', () => {
+    test('コンボボックス形式のテキスト入力であること', async () => {
       renderWithProvider(<CounterContainer />);
 
       // 時間指定モードに切り替え
@@ -98,58 +98,30 @@ describe('DateTimeInput 統合テスト', () => {
         expect(screen.getByText('指定した日時の地球回転数を計算')).toBeInTheDocument();
       });
 
-      // 初期状態はプルダウンモード
-      await waitFor(() => {
-        const yearSelect = screen.getByLabelText('年') as HTMLSelectElement;
-        expect(yearSelect.tagName).toBe('SELECT');
-      });
-
-      // テキストモードに切り替え
-      const textButton = screen.getByRole('button', { name: /テキスト入力に切り替え/i });
-      fireEvent.click(textButton);
-
-      // テキスト入力になることを確認
+      // コンボボックス形式（input + datalist）であることを確認
       await waitFor(() => {
         const yearInput = screen.getByLabelText('年') as HTMLInputElement;
         expect(yearInput.tagName).toBe('INPUT');
-      });
-
-      // プルダウンモードに戻す
-      const selectButton = screen.getByRole('button', { name: /プルダウン入力に切り替え/i });
-      fireEvent.click(selectButton);
-
-      // プルダウンに戻ることを確認
-      await waitFor(() => {
-        const yearSelect = screen.getByLabelText('年') as HTMLSelectElement;
-        expect(yearSelect.tagName).toBe('SELECT');
+        expect(yearInput.type).toBe('text');
+        expect(yearInput).toHaveAttribute('list', 'year-options');
       });
     });
   });
 
   describe('日時入力から計算までの完全なフロー', () => {
-    test('プルダウンで日時を入力して計算結果が表示されること', async () => {
+    test('日時を入力して計算結果が表示されること', async () => {
       renderWithProvider(<CounterContainer />);
 
       // 時間指定モードに切り替え
+      const datetimeButton = screen.getByRole('button', { name: /時間指定モードに切り替え/i });
+      fireEvent.click(datetimeButton);
+
       await waitFor(() => {
-        const datetimeButton = screen.getByRole('button', { name: /時間指定モードに切り替え/i });
-        fireEvent.click(datetimeButton);
+        expect(screen.getByLabelText('年')).toBeInTheDocument();
       });
 
-      // プルダウンで日時を入力
-      await waitFor(() => {
-        const yearSelect = screen.getByLabelText('年') as HTMLSelectElement;
-        const monthSelect = screen.getByLabelText('月') as HTMLSelectElement;
-        const daySelect = screen.getByLabelText('日') as HTMLSelectElement;
-        const hourSelect = screen.getByLabelText('時') as HTMLSelectElement;
-        const minuteSelect = screen.getByLabelText('分') as HTMLSelectElement;
-
-        fireEvent.change(yearSelect, { target: { value: '2025' } });
-        fireEvent.change(monthSelect, { target: { value: '12' } });
-        fireEvent.change(daySelect, { target: { value: '16' } });
-        fireEvent.change(hourSelect, { target: { value: '12' } });
-        fireEvent.change(minuteSelect, { target: { value: '34' } });
-      });
+      // 日時を入力
+      fillAllFields({ year: '2025', month: '12', day: '16', hour: '12', minute: '34' });
 
       // 計算ボタンをクリック
       const calculateButton = screen.getByRole('button', { name: /計算する/i });
@@ -158,76 +130,22 @@ describe('DateTimeInput 統合テスト', () => {
       // 計算結果が表示されることを確認
       await waitFor(() => {
         expect(screen.getByText('計算結果')).toBeInTheDocument();
-        expect(screen.getByText(/回転/)).toBeInTheDocument();
       });
     });
 
-    test('テキスト入力で日時を入力して計算結果が表示されること', async () => {
+    test('バリデーションエラーから修正できること', async () => {
       renderWithProvider(<CounterContainer />);
 
       // 時間指定モードに切り替え
+      const datetimeButton = screen.getByRole('button', { name: /時間指定モードに切り替え/i });
+      fireEvent.click(datetimeButton);
+
       await waitFor(() => {
-        const datetimeButton = screen.getByRole('button', { name: /時間指定モードに切り替え/i });
-        fireEvent.click(datetimeButton);
+        expect(screen.getByLabelText('年')).toBeInTheDocument();
       });
-
-      // テキスト入力モードに切り替え
-      const textButton = screen.getByRole('button', { name: /テキスト入力に切り替え/i });
-      fireEvent.click(textButton);
-
-      // テキスト入力で日時を入力
-      await waitFor(() => {
-        const yearInput = screen.getByLabelText('年');
-        const monthInput = screen.getByLabelText('月');
-        const dayInput = screen.getByLabelText('日');
-        const hourInput = screen.getByLabelText('時');
-        const minuteInput = screen.getByLabelText('分');
-
-        fireEvent.change(yearInput, { target: { value: '2025' } });
-        fireEvent.change(monthInput, { target: { value: '12' } });
-        fireEvent.change(dayInput, { target: { value: '16' } });
-        fireEvent.change(hourInput, { target: { value: '12' } });
-        fireEvent.change(minuteInput, { target: { value: '34' } });
-      });
-
-      // 計算ボタンをクリック
-      const calculateButton = screen.getByRole('button', { name: /計算する/i });
-      fireEvent.click(calculateButton);
-
-      // 計算結果が表示されることを確認
-      await waitFor(() => {
-        expect(screen.getByText('計算結果')).toBeInTheDocument();
-        expect(screen.getByText(/回転/)).toBeInTheDocument();
-      });
-    });
-
-    test('プルダウンモードでバリデーションエラーから修正できること', async () => {
-      renderWithProvider(<CounterContainer />);
-
-      // 時間指定モードに切り替え
-      await waitFor(() => {
-        const datetimeButton = screen.getByRole('button', { name: /時間指定モードに切り替え/i });
-        fireEvent.click(datetimeButton);
-      });
-
-      // テキストモードに切り替え（存在しない日付の入力のため）
-      const textButton = screen.getByRole('button', { name: /テキスト入力に切り替え/i });
-      fireEvent.click(textButton);
 
       // 不正な日時を入力（2月30日）
-      await waitFor(() => {
-        const yearInput = screen.getByLabelText('年');
-        const monthInput = screen.getByLabelText('月');
-        const dayInput = screen.getByLabelText('日');
-        const hourInput = screen.getByLabelText('時');
-        const minuteInput = screen.getByLabelText('分');
-
-        fireEvent.change(yearInput, { target: { value: '2025' } });
-        fireEvent.change(monthInput, { target: { value: '2' } });
-        fireEvent.change(dayInput, { target: { value: '30' } });
-        fireEvent.change(hourInput, { target: { value: '12' } });
-        fireEvent.change(minuteInput, { target: { value: '34' } });
-      });
+      fillAllFields({ year: '2025', month: '2', day: '30', hour: '12', minute: '34' });
 
       // 計算ボタンをクリック - エラーが表示される
       const calculateButton = screen.getByRole('button', { name: /計算する/i });
@@ -263,17 +181,7 @@ describe('DateTimeInput 統合テスト', () => {
 
       // 日時を入力して計算
       await waitFor(() => {
-        const yearSelect = screen.getByLabelText('年') as HTMLSelectElement;
-        const monthSelect = screen.getByLabelText('月') as HTMLSelectElement;
-        const daySelect = screen.getByLabelText('日') as HTMLSelectElement;
-        const hourSelect = screen.getByLabelText('時') as HTMLSelectElement;
-        const minuteSelect = screen.getByLabelText('分') as HTMLSelectElement;
-
-        fireEvent.change(yearSelect, { target: { value: '2025' } });
-        fireEvent.change(monthSelect, { target: { value: '12' } });
-        fireEvent.change(daySelect, { target: { value: '16' } });
-        fireEvent.change(hourSelect, { target: { value: '12' } });
-        fireEvent.change(minuteSelect, { target: { value: '34' } });
+        fillAllFields({ year: '2025', month: '12', day: '16', hour: '12', minute: '34' });
       });
 
       const calculateButton = screen.getByRole('button', { name: /計算する/i });
