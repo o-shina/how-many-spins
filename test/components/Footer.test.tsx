@@ -13,8 +13,8 @@ describe('Footer', () => {
   test('適切なCSSクラスが適用されていること', () => {
     const { container } = render(<Footer />);
     const footer = container.firstChild as HTMLElement;
-    
-    expect(footer).toHaveClass('bg-gray-50', 'border-t', 'border-gray-200', 'py-6');
+
+    expect(footer).toHaveClass('border-t', 'border-white/70', 'bg-white/70', 'py-6', 'backdrop-blur');
   });
 
   test('コピーライト年が正しく表示されること', () => {

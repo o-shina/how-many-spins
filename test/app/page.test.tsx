@@ -76,9 +76,9 @@ describe('HomePage', () => {
 
   test('コンテナの最大幅が設定されていること', () => {
     const { container } = render(<HomePage />);
-    
-    const containerDiv = container.querySelector('.container.mx-auto.max-w-4xl');
+
+    const containerDiv = container.querySelector('.container.mx-auto.max-w-5xl');
     expect(containerDiv).toBeInTheDocument();
-    expect(containerDiv).toHaveClass('py-8');
+    expect(containerDiv).toHaveClass('py-10');
   });
 });

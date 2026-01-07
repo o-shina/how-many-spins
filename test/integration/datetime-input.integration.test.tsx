@@ -194,7 +194,7 @@ describe('DateTimeInput 統合テスト', () => {
 
       // 表示形式トグルが表示されていることを確認
       await waitFor(() => {
-        expect(screen.getByText('表示形式:')).toBeInTheDocument();
+        expect(screen.getByText('表示形式')).toBeInTheDocument();
       });
     });
   });

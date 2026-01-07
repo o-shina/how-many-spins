@@ -15,16 +15,18 @@ function DisplayFormatToggle() {
   }
 
   return (
-    <div className="flex items-center justify-center mb-4">
-      <div className="flex items-center space-x-3">
-        <span className="text-sm font-medium text-gray-600">表示形式:</span>
+    <div className="flex items-center justify-center">
+      <div className="flex flex-wrap items-center gap-3">
+        <span className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+          表示形式
+        </span>
         <button
           onClick={toggleFormat}
           className={`
-            relative inline-flex h-8 w-16 items-center rounded-full border-2 transition-colors duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
+            relative inline-flex h-8 w-16 items-center rounded-full border-2 transition-colors duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-sky-400 focus:ring-offset-2 focus:ring-offset-transparent
             ${isInteger 
-              ? 'bg-blue-600 border-blue-600' 
-              : 'bg-gray-200 border-gray-300'
+              ? 'bg-slate-900 border-slate-900' 
+              : 'bg-white/70 border-slate-300'
             }
           `}
           type="button"
@@ -41,17 +43,17 @@ function DisplayFormatToggle() {
           />
         </button>
         <div className="flex flex-col text-xs">
-          <span className={`font-medium ${isInteger ? 'text-blue-600' : 'text-gray-400'}`}>
+          <span className={`font-semibold ${isInteger ? 'text-slate-900' : 'text-slate-400'}`}>
             整数
           </span>
-          <span className={`font-medium ${!isInteger ? 'text-blue-600' : 'text-gray-400'}`}>
+          <span className={`font-semibold ${!isInteger ? 'text-slate-900' : 'text-slate-400'}`}>
             小数
           </span>
         </div>
       </div>
       
       {/* 説明テキスト */}
-      <div className="ml-4 text-xs text-gray-500">
+      <div className="ml-4 text-xs text-slate-500">
         {isInteger ? '整数表示（切り捨て）' : '小数表示（6桁精度）'}
       </div>
     </div>

@@ -115,14 +115,14 @@ describe('CounterContainer', () => {
       const realtimeButton = screen.getByRole('button', { name: /リアルタイムモードに切り替え/i });
       const datetimeButton = screen.getByRole('button', { name: /時間指定モードに切り替え/i });
 
-      // 初期状態（リアルタイムモード選択）
-      expect(realtimeButton.className).toContain('bg-blue-600');
+      // 初期状態（リアルタイムモード選択）- グラデーションスタイル
+      expect(realtimeButton.className).toContain('bg-gradient-to-r');
       expect(realtimeButton.className).toContain('text-white');
 
       // 時間指定モードに切り替え
       fireEvent.click(datetimeButton);
 
-      expect(datetimeButton.className).toContain('bg-blue-600');
+      expect(datetimeButton.className).toContain('bg-gradient-to-r');
       expect(datetimeButton.className).toContain('text-white');
     });
   });

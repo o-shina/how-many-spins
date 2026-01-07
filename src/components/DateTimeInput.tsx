@@ -209,24 +209,27 @@ function DateTimeInput() {
   if (!formatLoaded) {
     return (
       <div className="text-center py-12">
-        <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mb-4"></div>
-        <p className="text-gray-600">読み込み中...</p>
+        <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-sky-500 mb-4"></div>
+        <p className="text-slate-600">読み込み中...</p>
       </div>
     );
   }
 
   return (
     <div className="w-full max-w-2xl mx-auto px-4">
-      <div className="bg-white rounded-lg shadow-md p-6 md:p-8">
-        <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-6 text-center">
+      <div className="rounded-2xl border border-white/70 bg-white/80 p-6 shadow-[0_20px_60px_rgba(15,23,42,0.08)] backdrop-blur md:p-8">
+        <h2 className="text-xl md:text-2xl font-semibold text-slate-900 mb-2 text-center">
           指定した日時の地球回転数を計算
         </h2>
+        <p className="text-center text-sm text-slate-500 mb-6">
+          UTCで入力し、地球の累積自転回数を確認できます
+        </p>
 
         {/* 入力フォーム */}
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* 日付入力 */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-3">
+            <label className="block text-sm font-semibold text-slate-700 mb-3">
               日付（UTC）
             </label>
             <div className="flex flex-wrap gap-2 items-center">
@@ -238,7 +241,7 @@ function DateTimeInput() {
                   value={inputValues.year}
                   onChange={(e) => handleInputChange('year', e.target.value)}
                   placeholder="2025"
-                  className="w-24 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-24 rounded-md border border-slate-200/80 bg-white/80 px-3 py-2 text-slate-900 shadow-sm focus:border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-300"
                   aria-label="年"
                 />
                 <datalist id="year-options">
@@ -246,7 +249,7 @@ function DateTimeInput() {
                     <option key={y} value={y} />
                   ))}
                 </datalist>
-                <span className="ml-1 text-gray-600">年</span>
+                <span className="ml-1 text-slate-600">年</span>
               </div>
               {/* コンボボックス：月 */}
               <div className="flex items-center">
@@ -256,7 +259,7 @@ function DateTimeInput() {
                   value={inputValues.month}
                   onChange={(e) => handleInputChange('month', e.target.value)}
                   placeholder="12"
-                  className="w-16 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-16 rounded-md border border-slate-200/80 bg-white/80 px-3 py-2 text-slate-900 shadow-sm focus:border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-300"
                   aria-label="月"
                 />
                 <datalist id="month-options">
@@ -264,7 +267,7 @@ function DateTimeInput() {
                     <option key={m} value={m} />
                   ))}
                 </datalist>
-                <span className="ml-1 text-gray-600">月</span>
+                <span className="ml-1 text-slate-600">月</span>
               </div>
               {/* コンボボックス：日 */}
               <div className="flex items-center">
@@ -274,7 +277,7 @@ function DateTimeInput() {
                   value={inputValues.day}
                   onChange={(e) => handleInputChange('day', e.target.value)}
                   placeholder="31"
-                  className="w-16 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-16 rounded-md border border-slate-200/80 bg-white/80 px-3 py-2 text-slate-900 shadow-sm focus:border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-300"
                   aria-label="日"
                 />
                 <datalist id="day-options">
@@ -282,14 +285,14 @@ function DateTimeInput() {
                     <option key={d} value={d} />
                   ))}
                 </datalist>
-                <span className="ml-1 text-gray-600">日</span>
+                <span className="ml-1 text-slate-600">日</span>
               </div>
             </div>
           </div>
 
           {/* 時刻入力 */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-3">
+            <label className="block text-sm font-semibold text-slate-700 mb-3">
               時刻（UTC）
             </label>
             <div className="flex flex-wrap gap-2 items-center">
@@ -301,7 +304,7 @@ function DateTimeInput() {
                   value={inputValues.hour}
                   onChange={(e) => handleInputChange('hour', e.target.value)}
                   placeholder="23"
-                  className="w-16 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-16 rounded-md border border-slate-200/80 bg-white/80 px-3 py-2 text-slate-900 shadow-sm focus:border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-300"
                   aria-label="時"
                 />
                 <datalist id="hour-options">
@@ -309,7 +312,7 @@ function DateTimeInput() {
                     <option key={h} value={h} />
                   ))}
                 </datalist>
-                <span className="ml-1 text-gray-600">時</span>
+                <span className="ml-1 text-slate-600">時</span>
               </div>
               {/* コンボボックス：分 */}
               <div className="flex items-center">
@@ -319,7 +322,7 @@ function DateTimeInput() {
                   value={inputValues.minute}
                   onChange={(e) => handleInputChange('minute', e.target.value)}
                   placeholder="59"
-                  className="w-16 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-16 rounded-md border border-slate-200/80 bg-white/80 px-3 py-2 text-slate-900 shadow-sm focus:border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-300"
                   aria-label="分"
                 />
                 <datalist id="minute-options">
@@ -327,15 +330,15 @@ function DateTimeInput() {
                     <option key={m} value={m} />
                   ))}
                 </datalist>
-                <span className="ml-1 text-gray-600">分</span>
+                <span className="ml-1 text-slate-600">分</span>
               </div>
             </div>
           </div>
 
           {/* エラーメッセージ */}
           {error && (
-            <div className="bg-red-50 border border-red-200 rounded-md p-3">
-              <p className="text-sm text-red-600">{error}</p>
+            <div className="rounded-md border border-rose-200 bg-rose-50 p-3">
+              <p className="text-sm text-rose-600">{error}</p>
             </div>
           )}
 
@@ -344,14 +347,14 @@ function DateTimeInput() {
             <button
               type="submit"
               disabled={isCalculating}
-              className="flex-1 bg-blue-600 text-white px-6 py-3 rounded-md font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="flex-1 rounded-md bg-gradient-to-r from-sky-500 to-emerald-500 px-6 py-3 font-semibold text-white shadow-sm transition hover:brightness-105 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:ring-offset-2 focus:ring-offset-transparent disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isCalculating ? '計算中...' : '計算する'}
             </button>
             <button
               type="button"
               onClick={handleClear}
-              className="px-6 py-3 border border-gray-300 text-gray-700 rounded-md font-medium hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors"
+              className="rounded-md border border-slate-300/80 px-6 py-3 font-semibold text-slate-700 transition hover:bg-white/70 focus:outline-none focus:ring-2 focus:ring-slate-300 focus:ring-offset-2 focus:ring-offset-transparent"
             >
               クリア
             </button>
@@ -360,18 +363,18 @@ function DateTimeInput() {
 
         {/* 計算結果 */}
         {result && (
-          <div className="mt-8 pt-8 border-t border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4 text-center">
+          <div className="mt-8 pt-8 border-t border-slate-200">
+            <h3 className="text-lg font-semibold text-slate-800 mb-4 text-center">
               計算結果
             </h3>
 
             {/* 入力した日時 */}
             <div className="mb-6">
-              <p className="text-sm text-gray-600 mb-2">入力日時:</p>
-              <p className="text-lg font-mono text-gray-800">
+              <p className="text-sm text-slate-600 mb-2">入力日時:</p>
+              <p className="text-lg font-mono text-slate-800">
                 {result.formattedDateTime}
                 {result.isFuture && (
-                  <span className="ml-2 text-sm text-orange-600 font-normal">
+                  <span className="ml-2 text-sm text-amber-600 font-normal">
                     （未来の日時）
                   </span>
                 )}
@@ -379,11 +382,11 @@ function DateTimeInput() {
             </div>
 
             {/* 回転数表示 */}
-            <div className="bg-gradient-to-r from-blue-50 to-green-50 rounded-lg p-6">
-              <p className="text-sm text-gray-600 mb-2 text-center">
+            <div className="rounded-xl border border-white/70 bg-white/80 p-6 shadow-sm">
+              <p className="text-sm text-slate-600 mb-2 text-center">
                 地球の累積自転回数
               </p>
-              <p className="text-3xl md:text-4xl font-bold text-blue-800 font-mono text-center">
+              <p className="text-3xl md:text-4xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-sky-600 to-emerald-600 font-mono text-center">
                 {formatRotation(result.rotationCount)} 回転
               </p>
             </div>
@@ -394,7 +397,7 @@ function DateTimeInput() {
             </div>
 
             {/* 計算基準の説明 */}
-            <div className="text-xs text-gray-500 mt-4 text-center">
+            <div className="text-xs text-slate-500 mt-4 text-center">
               <p>※ 計算基準: 西暦1年1月1日 00:00 UTC = 0回転</p>
               <p>※ 恒星日（23時間56分4秒）基準で計算</p>
             </div>
@@ -403,7 +406,7 @@ function DateTimeInput() {
       </div>
 
       {/* 使い方の説明 */}
-      <div className="mt-6 text-sm text-gray-600 text-center">
+      <div className="mt-6 text-sm text-slate-600 text-center">
         <p>※ 日時はUTC（協定世界時）で入力してください</p>
         <p>※ 年は1〜9999の範囲で指定可能です</p>
       </div>
