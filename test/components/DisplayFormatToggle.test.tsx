@@ -29,12 +29,12 @@ describe('DisplayFormatToggle', () => {
 
   test('整数表示モードで正しく表示されること', () => {
     render(<DisplayFormatToggle />);
-    
-    expect(screen.getByText('表示形式:')).toBeInTheDocument();
+
+    expect(screen.getByText('表示形式')).toBeInTheDocument();
     expect(screen.getByText('整数')).toBeInTheDocument();
     expect(screen.getByText('小数')).toBeInTheDocument();
     expect(screen.getByText('整数表示（切り捨て）')).toBeInTheDocument();
-    
+
     const toggleButton = screen.getByRole('switch');
     expect(toggleButton).toBeInTheDocument();
     expect(toggleButton).toHaveAttribute('aria-checked', 'true');
@@ -76,31 +76,31 @@ describe('DisplayFormatToggle', () => {
 
   test('適切なCSSクラスが適用されていること', () => {
     render(<DisplayFormatToggle />);
-    
+
     const toggleButton = screen.getByRole('switch');
-    expect(toggleButton).toHaveClass('bg-blue-600', 'border-blue-600');
-    
+    expect(toggleButton).toHaveClass('bg-slate-900', 'border-slate-900');
+
     const integerLabel = screen.getByText('整数');
-    expect(integerLabel).toHaveClass('text-blue-600');
-    
+    expect(integerLabel).toHaveClass('text-slate-900');
+
     const decimalLabel = screen.getByText('小数');
-    expect(decimalLabel).toHaveClass('text-gray-400');
+    expect(decimalLabel).toHaveClass('text-slate-400');
   });
 
   test('小数モード時に適切なCSSクラスが適用されていること', () => {
     mockUseDisplayFormat.format = 'decimal';
     mockUseDisplayFormat.isInteger = false;
     mockUseDisplayFormat.isDecimal = true;
-    
+
     render(<DisplayFormatToggle />);
-    
+
     const toggleButton = screen.getByRole('switch');
-    expect(toggleButton).toHaveClass('bg-gray-200', 'border-gray-300');
-    
+    expect(toggleButton).toHaveClass('bg-white/70', 'border-slate-300');
+
     const integerLabel = screen.getByText('整数');
-    expect(integerLabel).toHaveClass('text-gray-400');
-    
+    expect(integerLabel).toHaveClass('text-slate-400');
+
     const decimalLabel = screen.getByText('小数');
-    expect(decimalLabel).toHaveClass('text-blue-600');
+    expect(decimalLabel).toHaveClass('text-slate-900');
   });
 });

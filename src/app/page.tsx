@@ -14,7 +14,7 @@ export default function HomePage() {
         <Header />
 
         <main className="flex-grow">
-          <div className="container mx-auto max-w-4xl py-8">
+          <div className="container mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
             {/* カウンターコンテナ（リアルタイム/時間指定切り替え） */}
             <section className="mb-12">
               <CounterContainer />

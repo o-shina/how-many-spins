@@ -76,19 +76,19 @@ function MainCounter() {
   if (isLoading || !formatLoaded) {
     return (
       <div className="text-center py-12">
-        <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mb-4"></div>
-        <p className="text-gray-600">計算中...</p>
+        <div className="inline-block h-8 w-8 animate-spin rounded-full border-b-2 border-sky-500 mb-4"></div>
+        <p className="text-slate-600">計算中...</p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="text-center py-12 text-red-600">
+      <div className="text-center py-12 text-rose-600">
         <p className="text-lg mb-4">{error}</p>
         <button 
           onClick={updateRotationData}
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+          className="px-4 py-2 rounded-md bg-slate-900 text-white hover:bg-slate-800 transition-colors"
         >
           再試行
         </button>
@@ -98,7 +98,7 @@ function MainCounter() {
 
   if (!rotationData) {
     return (
-      <div className="text-center py-12 text-gray-600">
+      <div className="text-center py-12 text-slate-600">
         <p>データを読み込めませんでした</p>
       </div>
     );
@@ -106,41 +106,50 @@ function MainCounter() {
 
   return (
     <div className="text-center py-8 md:py-12">
-      {/* 現在時刻表示 */}
-      <div className="mb-6">
-        <h2 className="text-lg md:text-xl font-semibold text-gray-700 mb-2">
-          現在時刻
-        </h2>
-        <p className="text-xl md:text-2xl font-mono text-gray-800">
-          {rotationData.formattedDateTime}
-        </p>
-      </div>
+      <div className="grid gap-6">
+        {/* 現在時刻表示 */}
+        <div className="rounded-2xl border border-white/70 bg-white/70 p-6 shadow-sm backdrop-blur">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+            Current Time (UTC)
+          </p>
+          <h2 className="mt-3 text-lg font-semibold text-slate-700 md:text-xl">
+            現在時刻
+          </h2>
+          <p className="mt-2 text-xl font-mono text-slate-900 md:text-2xl">
+            {rotationData.formattedDateTime}
+          </p>
+        </div>
 
-      {/* 地球回転数表示 */}
-      <div className="mb-6">
-        <h2 className="text-lg md:text-xl font-semibold text-gray-700 mb-4">
-          地球の累積自転回数
-        </h2>
-        <div className="bg-gradient-to-r from-blue-50 to-green-50 rounded-lg p-6 md:p-8 mx-4">
-          <p className="text-3xl md:text-5xl lg:text-6xl font-bold text-blue-800 font-mono mb-2">
+        {/* 地球回転数表示 */}
+        <div className="rounded-2xl border border-white/70 bg-white/80 p-6 shadow-[0_20px_60px_rgba(15,23,42,0.08)] backdrop-blur">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+            Earth Rotation Counter
+          </p>
+          <h2 className="mt-3 text-lg font-semibold text-slate-700 md:text-xl">
+            地球の累積自転回数
+          </h2>
+          <p className="mt-4 text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-sky-600 to-emerald-600 font-mono md:text-5xl lg:text-6xl animate-counter">
             {formatRotation(rotationData.rotationCount)} 回転
           </p>
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-3 text-xs text-slate-500">
+            <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200/70 bg-emerald-50 px-3 py-1 font-semibold text-emerald-700">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+              リアルタイム更新中
+            </span>
+            <span>恒星日基準で計算</span>
+          </div>
         </div>
       </div>
 
       {/* 表示形式切り替えトグル */}
-      <DisplayFormatToggle />
-
-      {/* 計算基準の説明 */}
-      <div className="text-sm text-gray-500 mt-4">
-        <p>※ 計算基準: 西暦1年1月1日 00:00 UTC = 0回転</p>
-        <p>※ 恒星日（23時間56分4秒）基準で計算</p>
+      <div className="mt-6">
+        <DisplayFormatToggle />
       </div>
 
-      {/* リアルタイム更新インジケーター */}
-      <div className="flex items-center justify-center mt-4 text-xs text-gray-400">
-        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse mr-2"></div>
-        <span>リアルタイム更新中</span>
+      {/* 計算基準の説明 */}
+      <div className="mt-6 text-xs text-slate-500">
+        <p>※ 計算基準: 西暦1年1月1日 00:00 UTC = 0回転</p>
+        <p>※ 恒星日（23時間56分4秒）基準で計算</p>
       </div>
     </div>
   );

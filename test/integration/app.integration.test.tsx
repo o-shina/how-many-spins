@@ -13,7 +13,7 @@ describe('App Integration Tests', () => {
     
     // ヘッダーが表示されること
     expect(screen.getByRole('heading', { level: 1, name: '地球が何回回った時？' })).toBeInTheDocument();
-    expect(screen.getByText('How Many Spins? - 煽りフレーズに即答するWebアプリ')).toBeInTheDocument();
+    expect(screen.getByText(/How Many Spins\? - 煽りフレーズに即答する/)).toBeInTheDocument();
     
     // メインカウンターが正しく初期化されること
     await waitFor(() => {
@@ -134,17 +134,17 @@ describe('App Integration Tests', () => {
 
   test('レスポンシブデザインのCSSクラスが正しく適用されていること', async () => {
     render(<HomePage />);
-    
+
     // メイン要素のレスポンシブクラスを確認
     const main = screen.getByRole('main');
     expect(main).toHaveClass('flex-grow');
-    
+
     // ヘッダータイトルのレスポンシブクラスを確認
     await waitFor(() => {
       const title = screen.getByRole('heading', { level: 1, name: '地球が何回回った時？' });
-      expect(title).toHaveClass('text-2xl', 'md:text-4xl', 'font-bold');
+      expect(title).toHaveClass('text-3xl', 'md:text-5xl', 'font-semibold');
     });
-    
+
     // 回転数表示の存在を確認（CSSクラスチェックは省略）
     await waitFor(() => {
       const rotationDisplay = screen.getByText(/\d{1,3}(,\d{3})* 回転/);

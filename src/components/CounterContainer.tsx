@@ -17,14 +17,14 @@ function CounterContainer() {
     <div className="w-full">
       {/* タブ切り替えUI */}
       <div className="flex justify-center mb-8">
-        <div className="inline-flex rounded-lg border border-gray-300 bg-white p-1 shadow-sm">
+        <div className="inline-flex rounded-full border border-white/70 bg-white/70 p-1 shadow-sm backdrop-blur">
           <button
             onClick={() => setMode('realtime')}
             className={`
-              px-6 py-2.5 text-sm font-medium rounded-md transition-all duration-200
+              px-6 py-2.5 text-sm font-semibold rounded-full transition-all duration-200
               ${mode === 'realtime'
-                ? 'bg-blue-600 text-white shadow-sm'
-                : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
+                ? 'bg-gradient-to-r from-sky-500 to-emerald-500 text-white shadow-sm'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-white/70'
               }
             `}
             type="button"
@@ -41,10 +41,10 @@ function CounterContainer() {
           <button
             onClick={() => setMode('datetime')}
             className={`
-              px-6 py-2.5 text-sm font-medium rounded-md transition-all duration-200
+              px-6 py-2.5 text-sm font-semibold rounded-full transition-all duration-200
               ${mode === 'datetime'
-                ? 'bg-blue-600 text-white shadow-sm'
-                : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
+                ? 'bg-gradient-to-r from-sky-500 to-emerald-500 text-white shadow-sm'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-white/70'
               }
             `}
             type="button"
