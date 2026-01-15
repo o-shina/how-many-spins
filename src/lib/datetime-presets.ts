@@ -98,6 +98,19 @@ export const DATETIME_PRESETS: DateTimePreset[] = [
       minute: 17,
     },
   },
+  {
+    id: 'osaka-expo-2025',
+    label: '大阪・関西万博開幕',
+    description: '2025年4月13日 10:00 JST（01:00 UTC）',
+    category: 'event',
+    datetime: {
+      year: 2025,
+      month: 4,
+      day: 13,
+      hour: 1,
+      minute: 0,
+    },
+  },
   // マイルストーンカテゴリ
   {
     id: 'unix-epoch',
