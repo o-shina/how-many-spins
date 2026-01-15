@@ -242,6 +242,91 @@ describe('DateTimeInput 統合テスト', () => {
     });
   });
 
+  describe('プリセット機能の統合テスト', () => {
+    test('プリセット選択から計算までの一連の流れが正常に動作すること', async () => {
+      renderWithProvider(<CounterContainer />);
+
+      // 時間指定モードに切り替え
+      await waitFor(() => {
+        const datetimeButton = screen.getByRole('button', { name: /時間指定モードに切り替え/i });
+        fireEvent.click(datetimeButton);
+      });
+
+      await waitFor(() => {
+        expect(screen.getByText('プリセットから選択')).toBeInTheDocument();
+      });
+
+      // 令和元年を選択
+      await waitFor(() => {
+        const reiwaButton = screen.getByRole('button', { name: /令和元年を選択/i });
+        fireEvent.click(reiwaButton);
+      });
+
+      // 入力値が反映されていることを確認
+      await waitFor(() => {
+        const yearInput = screen.getByLabelText('年') as HTMLInputElement;
+        expect(yearInput.value).toBe('2019');
+      });
+
+      // 計算を実行
+      await waitFor(() => {
+        const calculateButton = screen.getByRole('button', { name: /計算する/i });
+        fireEvent.click(calculateButton);
+      });
+
+      // 計算結果が表示されることを確認
+      await waitFor(() => {
+        expect(screen.getByText('計算結果')).toBeInTheDocument();
+      });
+    });
+
+    test('プリセット選択後にタブを切り替えて戻ると入力値がリセットされること', async () => {
+      renderWithProvider(<CounterContainer />);
+
+      // 時間指定モードに切り替え
+      await waitFor(() => {
+        const datetimeButton = screen.getByRole('button', { name: /時間指定モードに切り替え/i });
+        fireEvent.click(datetimeButton);
+      });
+
+      await waitFor(() => {
+        expect(screen.getByText('プリセットから選択')).toBeInTheDocument();
+      });
+
+      // UNIXエポックを選択
+      await waitFor(() => {
+        const unixButton = screen.getByRole('button', { name: /UNIXエポックを選択/i });
+        fireEvent.click(unixButton);
+      });
+
+      // 入力値が反映されていることを確認
+      await waitFor(() => {
+        const yearInput = screen.getByLabelText('年') as HTMLInputElement;
+        expect(yearInput.value).toBe('1970');
+      });
+
+      // リアルタイムモードに戻す
+      const realtimeButton = screen.getByRole('button', { name: /リアルタイムモードに切り替え/i });
+      fireEvent.click(realtimeButton);
+
+      await waitFor(() => {
+        expect(screen.getByText('地球の累積自転回数')).toBeInTheDocument();
+      });
+
+      // 再度時間指定モードに切り替え
+      await waitFor(() => {
+        const datetimeButton = screen.getByRole('button', { name: /時間指定モードに切り替え/i });
+        fireEvent.click(datetimeButton);
+      });
+
+      // 入力値がリセットされていることを確認
+      await waitFor(() => {
+        const yearInput = screen.getByLabelText('年') as HTMLInputElement;
+        expect(yearInput.value).toBe('');
+      });
+    });
+  });
+
   // ヘルパー関数
   function fillAllFields({ year, month, day, hour, minute }: {
     year: string;

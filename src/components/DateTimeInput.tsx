@@ -5,6 +5,11 @@ import { EarthRotationCalculator } from '@/lib/earth-rotation-calculator';
 import { formatDateTime } from '@/lib/date-formatter';
 import { useDisplayFormat } from '@/hooks/useDisplayFormat';
 import DisplayFormatToggle from './DisplayFormatToggle';
+import {
+  CATEGORY_LABELS,
+  getPresetsByCategory,
+} from '@/lib/datetime-presets';
+import { DateTimePreset } from '@/types/earth-rotation';
 
 interface DateTimeInputValues {
   year: string;
@@ -206,6 +211,33 @@ function DateTimeInput() {
     setError(null);
   }, []);
 
+  /**
+   * プリセット選択時のハンドラ
+   */
+  const handlePresetSelect = useCallback((preset: DateTimePreset) => {
+    setInputValues({
+      year: String(preset.datetime.year),
+      month: String(preset.datetime.month),
+      day: String(preset.datetime.day),
+      hour: String(preset.datetime.hour),
+      minute: String(preset.datetime.minute),
+    });
+    setError(null);
+    setResult(null);
+  }, []);
+
+  /**
+   * カテゴリ別にグループ化されたプリセット
+   */
+  const groupedPresets = useMemo(() => {
+    const categories: DateTimePreset['category'][] = ['era', 'event', 'milestone'];
+    return categories.map((category) => ({
+      category,
+      label: CATEGORY_LABELS[category],
+      presets: getPresetsByCategory(category),
+    }));
+  }, []);
+
   if (!formatLoaded) {
     return (
       <div className="text-center py-12">
@@ -224,6 +256,43 @@ function DateTimeInput() {
         <p className="text-center text-sm text-slate-500 mb-6">
           UTCで入力し、地球の累積自転回数を確認できます
         </p>
+
+        {/* プリセット選択 */}
+        <div className="mb-6">
+          <label className="block text-sm font-semibold text-slate-700 mb-3">
+            プリセットから選択
+          </label>
+          <div className="space-y-3">
+            {groupedPresets.map(({ category, label, presets }) => (
+              <div key={category}>
+                <p className="text-xs font-medium text-slate-500 mb-2">{label}</p>
+                <div className="flex flex-wrap gap-2">
+                  {presets.map((preset) => (
+                    <button
+                      key={preset.id}
+                      type="button"
+                      onClick={() => handlePresetSelect(preset)}
+                      className="rounded-full border border-slate-200/80 bg-white/70 px-3 py-1.5 text-xs font-medium text-slate-700 transition hover:border-sky-300 hover:bg-sky-50 hover:text-sky-700 focus:outline-none focus:ring-2 focus:ring-sky-300"
+                      title={preset.description}
+                      aria-label={`${preset.label}を選択: ${preset.description}`}
+                    >
+                      {preset.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="relative mb-6">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-slate-200"></div>
+          </div>
+          <div className="relative flex justify-center">
+            <span className="bg-white/80 px-3 text-xs text-slate-500">または直接入力</span>
+          </div>
+        </div>
 
         {/* 入力フォーム */}
         <form onSubmit={handleSubmit} className="space-y-6">
