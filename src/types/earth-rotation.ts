@@ -41,3 +41,25 @@ export interface AppState {
   /** 最終更新時刻 */
   lastUpdateTime: number;
 }
+
+/**
+ * 日時プリセットの型定義
+ */
+export interface DateTimePreset {
+  /** プリセットID */
+  id: string;
+  /** 表示名 */
+  label: string;
+  /** 説明文 */
+  description: string;
+  /** カテゴリ */
+  category: 'era' | 'event' | 'milestone';
+  /** 日時データ（UTC） */
+  datetime: {
+    year: number;
+    month: number;
+    day: number;
+    hour: number;
+    minute: number;
+  };
+}

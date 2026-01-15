@@ -300,6 +300,113 @@ describe('DateTimeInput', () => {
     });
   });
 
+  describe('プリセット機能', () => {
+    test('プリセット選択UIが表示されること', async () => {
+      renderWithProvider(<DateTimeInput />);
+
+      await waitFor(() => {
+        expect(screen.getByText('プリセットから選択')).toBeInTheDocument();
+        expect(screen.getByText('元号')).toBeInTheDocument();
+        expect(screen.getByText('イベント')).toBeInTheDocument();
+        expect(screen.getByText('マイルストーン')).toBeInTheDocument();
+      });
+    });
+
+    test('プリセットボタンが表示されること', async () => {
+      renderWithProvider(<DateTimeInput />);
+
+      await waitFor(() => {
+        expect(screen.getByRole('button', { name: /令和元年を選択/i })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /平成元年を選択/i })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /2000年問題を選択/i })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /UNIXエポックを選択/i })).toBeInTheDocument();
+      });
+    });
+
+    test('プリセットをクリックすると入力値が反映されること', async () => {
+      renderWithProvider(<DateTimeInput />);
+
+      await waitFor(() => {
+        // 令和元年を選択（2019年4月30日 15:00 UTC）
+        const reiwaButton = screen.getByRole('button', { name: /令和元年を選択/i });
+        fireEvent.click(reiwaButton);
+
+        const yearInput = screen.getByLabelText('年') as HTMLInputElement;
+        const monthInput = screen.getByLabelText('月') as HTMLInputElement;
+        const dayInput = screen.getByLabelText('日') as HTMLInputElement;
+        const hourInput = screen.getByLabelText('時') as HTMLInputElement;
+        const minuteInput = screen.getByLabelText('分') as HTMLInputElement;
+
+        expect(yearInput.value).toBe('2019');
+        expect(monthInput.value).toBe('4');
+        expect(dayInput.value).toBe('30');
+        expect(hourInput.value).toBe('15');
+        expect(minuteInput.value).toBe('0');
+      });
+    });
+
+    test('別のプリセットを選択すると入力値が更新されること', async () => {
+      renderWithProvider(<DateTimeInput />);
+
+      await waitFor(() => {
+        // 令和元年を選択
+        const reiwaButton = screen.getByRole('button', { name: /令和元年を選択/i });
+        fireEvent.click(reiwaButton);
+
+        // UNIXエポックを選択（1970年1月1日 00:00 UTC）
+        const unixButton = screen.getByRole('button', { name: /UNIXエポックを選択/i });
+        fireEvent.click(unixButton);
+
+        const yearInput = screen.getByLabelText('年') as HTMLInputElement;
+        const monthInput = screen.getByLabelText('月') as HTMLInputElement;
+        const dayInput = screen.getByLabelText('日') as HTMLInputElement;
+
+        expect(yearInput.value).toBe('1970');
+        expect(monthInput.value).toBe('1');
+        expect(dayInput.value).toBe('1');
+      });
+    });
+
+    test('プリセット選択後にエラーがクリアされること', async () => {
+      renderWithProvider(<DateTimeInput />);
+
+      await waitFor(async () => {
+        // エラーを発生させる
+        const calculateButton = screen.getByRole('button', { name: /計算する/i });
+        fireEvent.click(calculateButton);
+
+        await waitFor(() => {
+          expect(screen.getByText('すべての項目を入力してください')).toBeInTheDocument();
+        });
+
+        // プリセットを選択
+        const reiwaButton = screen.getByRole('button', { name: /令和元年を選択/i });
+        fireEvent.click(reiwaButton);
+
+        expect(screen.queryByText('すべての項目を入力してください')).not.toBeInTheDocument();
+      });
+    });
+
+    test('プリセット選択後に計算できること', async () => {
+      renderWithProvider(<DateTimeInput />);
+
+      await waitFor(async () => {
+        // 令和元年を選択
+        const reiwaButton = screen.getByRole('button', { name: /令和元年を選択/i });
+        fireEvent.click(reiwaButton);
+
+        // 計算実行
+        const calculateButton = screen.getByRole('button', { name: /計算する/i });
+        fireEvent.click(calculateButton);
+
+        await waitFor(() => {
+          expect(mockCalculateRotationsFromDate).toHaveBeenCalled();
+          expect(screen.getByText('計算結果')).toBeInTheDocument();
+        });
+      });
+    });
+  });
+
   // ヘルパー関数
   function fillAllFields({ year, month, day, hour, minute }: {
     year: string;
